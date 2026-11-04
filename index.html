@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>الحديقة المزدهرة – سورة التحريم</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- The game screen is drawn into this container by script.js -->
+<main class="wrap" id="app"></main>
+<noscript><p style="text-align:center">يرجى تفعيل JavaScript لتشغيل اللعبة.</p></noscript>
+
+<!-- ===== Screen templates (script.js fills the {{placeholders}}) ===== -->
+
+<!-- Home icon shown on every screen except Welcome and Questions -->
+<template id="t-hb">
+  <div><button class="hb" onclick="go('w')" aria-label="الصفحة الرئيسية">🏠</button></div>
+</template>
+
+<!-- Screen 1: Welcome -->
+<template id="t-w">
+  <div class="c">
+    <h1>الحديقة المزدهرة</h1>
+    <p class="sub">مراجعة سورة التحريم</p>
+    {{garden}}
+    <button class="btn" onclick="go('i')">ابدأ الرحلة</button>
+  </div>
+</template>
+
+<!-- Game introduction + student name -->
+<template id="t-i">
+  <div class="c">
+    <h2>كيف تلعب؟</h2>
+    <div class="how">
+      <p>🌱 خمسة مستويات لمراجعة سورة التحريم آية بعد آية</p>
+      <p>✅ أجب عن الأسئلة لتنمو حديقتك</p>
+      <p>🌸 كلما كانت إجاباتك أدق، ازدادت حديقتك جمالًا</p>
+      <p>🔒 عليك اجتياز المستوى للانتقال إلى المستوى الذي بعده</p>
+    </div>
+    <label for="nm" class="ins">اكتب اسمك</label><br>
+    <input id="nm" class="nm" maxlength="30" value="{{name}}" placeholder="اسمك هنا" autocomplete="off"><br>
+    <button class="btn" onclick="gn()">هيا نبدأ</button>
+  </div>
+</template>
+
+<!-- Screen 2: Level selection -->
+<template id="t-s">
+  <div class="c">
+    <h2>اختر مستواك</h2>
+    {{garden}}
+    <div class="jr">{{journey}}</div>
+    <div class="lvs">{{levels}}</div>
+    <button class="ghost" onclick="rs()">{{reset}}</button>
+    <button class="ghost" onclick="mute=!mute;this.textContent=mute?'🔇':'🔊'">{{sound}}</button>
+  </div>
+</template>
+
+<!-- Screen 3: Question screen -->
+<template id="t-q">
+  <div class="top">
+    <span>
+      <button class="hb" onclick="go('w')" aria-label="الصفحة الرئيسية">🏠</button>
+      <button class="ghost" onclick="go('s')">المراحل</button>
+    </span>
+    <b>{{level}}</b>
+    <span>{{prev}}{{pos}}</span>
+  </div>
+  <div class="bar"><i style="width:{{pct}}%"></i></div>
+  <div class="play">
+    <div id="qa">{{body}}</div>
+    {{garden}}
+  </div>
+</template>
+
+<!-- Level not passed: repeat the level -->
+<template id="t-x">
+  <div class="c">
+    <h2>قريب جدًا!</h2>
+    {{garden}}
+    <p class="fb a">حديقتك تحتاج مزيدًا من المراجعة. راجع الآيات ثم أعد المستوى لتفتح المستوى التالي.</p>
+    <button class="btn" onclick="start({{lv}})">أعد المستوى</button>
+    <button class="ghost" onclick="go('s')">المراحل</button>
+  </div>
+</template>
+
+<!-- Screen 4: Level completion -->
+<template id="t-d">
+  <div class="c">
+    <h2>أحسنت! أنهيت {{level}}</h2>
+    <p class="fb g" style="margin:0">انظر كيف ازدهرت حديقتك!</p>
+    {{garden}}
+    <p class="fb g">{{msg}}</p>
+    <p>{{msg2}}</p>
+    <p style="font-size:1.8rem;margin:0">{{petals}}</p>
+    <button class="btn" onclick="{{next}}">تابع نمو حديقتك</button>
+  </div>
+</template>
+
+<!-- Screen 5: Final celebration, secret gate and badge -->
+<template id="t-f">
+  <div class="cf">{{confetti}}</div>
+  <div class="c">
+    <h1 style="font-size:clamp(1.8rem,5vw,3rem)">أحسنت! لقد أصبحت حديقتك مزدهرة!</h1>
+    {{garden}}
+    <div class="gate" id="gate">
+      <div class="secret">
+        <div class="sg">🌺🪻🌷🌼🌸</div>
+        <div>حديقتك السرية</div>
+        <small>تفتحت لأنك واصلت المراجعة</small>
+      </div>
+      <div class="door l"></div>
+      <div class="door r"></div>
+    </div>
+    <button class="btn" id="gb" onclick="op()">افتح البوابة السرية</button>
+    <div class="badge" id="bd">
+      <b>🏅</b>
+      <h3>شارة إتقان سورة التحريم</h3>
+      <p>تُمنح هذه الشارة إلى</p>
+      <div class="nmv">{{name}}</div>
+      <p>بارك الله فيك على مراجعتك وازدهار حديقتك</p>
+    </div>
+    <button class="ghost" onclick="go('s')">العودة للمراحل</button>
+  </div>
+</template>
+
+<script src="script.js"></script>
+</body>
+</html>
